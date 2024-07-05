@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, FC, ReactNode, ChangeEvent } from "react";
+import { useState, useEffect, useRef, FC, ChangeEvent } from "react";
 import { createPortal } from "react-dom";
 import classNames from "classnames";
 
@@ -14,7 +14,6 @@ interface SelectProps {
   multiple?: boolean;
   onChange: (selected: Option | Option[]) => void;
   portal?: boolean;
-  renderOption?: (option: Option, isSelected: boolean) => ReactNode;
   withSearch?: boolean;
   zIndex?: number;
   outlined?: boolean;
@@ -25,7 +24,6 @@ const Select: FC<SelectProps> = ({
   multiple = true,
   onChange,
   portal = false,
-  renderOption,
   withSearch = true,
   zIndex = 50,
   outlined = false,
@@ -169,19 +167,10 @@ const Select: FC<SelectProps> = ({
       )}
       <div className="max-h-60 overflow-y-auto">
         {options.map((option) =>
-          renderOption
-            ? renderOption(
-                option,
-                selectedOptions.some(
-                  (selected) => selected.value === option.value
-                )
-              )
-            : renderDefaultOption(
-                option,
-                selectedOptions.some(
-                  (selected) => selected.value === option.value
-                )
-              )
+          renderDefaultOption(
+            option,
+            selectedOptions.some((selected) => selected.value === option.value)
+          )
         )}
       </div>
     </div>
