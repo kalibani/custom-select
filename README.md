@@ -112,3 +112,10 @@ export default App;
 | `withSearch`   | `boolean`                                                       | `true`        | Enable or disable the search feature within the dropdown.                                                      |
 | `zIndex`       | `number`                                                        | `50`          | Ensure the floating menu works with elements that have a z-index greater than the specified value.             |
 | `outlined`       | `boolean`                                                        | `false`          | Enable or disable outline style.             |
+
+
+## Storybook Usage
+In the project directory, you can run: 
+```
+npm run storybook
+```
