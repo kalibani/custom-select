@@ -26,7 +26,10 @@ export default defineConfig({
     sourcemap: true,
     emptyOutDir: true,
   },
-  plugins: [react(), dts({ rollupTypes: true })] as UserConfig['plugins'],
+  plugins: [
+    react(),
+    dts({ rollupTypes: true, insertTypesEntry: true }),
+  ] as UserConfig['plugins'],
   css: {
     postcss: {
       plugins: [tailwindcss],
