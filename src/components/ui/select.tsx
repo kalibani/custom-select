@@ -1,21 +1,12 @@
 import { useState, useEffect, useRef, FC, ChangeEvent } from 'react'
 import { createPortal } from 'react-dom'
 import classNames from 'classnames'
-import { Option } from '@/types/option'
-import { ChevronDown, CircleX, Search } from 'lucide-react'
+import { SelectProps, Option } from '@/types/select'
+import { ChevronDown, CircleX } from 'lucide-react'
+import SelectContent from './SelectContent'
+import useClickOutside from '@/hooks/useClickOutside'
 
-// placed SelectProps interface as close as to their usage since it will not be share to another component
-interface SelectProps {
-  options: Option[]
-  multiple?: boolean
-  onChange: (selected: Option | Option[]) => void
-  portal?: boolean
-  withSearch?: boolean
-  zIndex?: number
-  outlined?: boolean
-}
-
-const Select: FC<SelectProps> = ({
+const SelectContainer: FC<SelectProps> = ({
   options,
   multiple = true,
   onChange,
@@ -24,14 +15,13 @@ const Select: FC<SelectProps> = ({
   zIndex = 50,
   outlined = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(false) // State to track if the dropdown is open
-  const [searchTerm, setSearchTerm] = useState('') // State to track the search input
-  const [selectedOptions, setSelectedOptions] = useState<Option[]>([]) // State to track selected options
+  const [isOpen, setIsOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedOptions, setSelectedOptions] = useState<Option[]>([])
 
-  const dropdownRef = useRef<HTMLDivElement>(null) // Ref for the dropdown container
-  const dropdownMenuRef = useRef<HTMLDivElement>(null) // Ref for the dropdown menu
+  const selectRef = useRef<HTMLDivElement>(null)
+  const selectContentRef = useRef<HTMLDivElement>(null)
 
-  // Function to handle the selection and deselection of options
   const handleOptionClick = (option: Option) => {
     if (multiple) {
       const isSelected = selectedOptions.some(
@@ -45,11 +35,10 @@ const Select: FC<SelectProps> = ({
     } else {
       setSelectedOptions([option])
       onChange(option)
-      setIsOpen(false) // Close the dropdown if single select
+      setIsOpen(false)
     }
   }
 
-  // Function to handle the removal of selected options
   const handleRemoveOption = (option: Option) => {
     const newSelectedOptions = selectedOptions.filter(
       (selected) => selected.value !== option.value
@@ -58,124 +47,29 @@ const Select: FC<SelectProps> = ({
     onChange(newSelectedOptions)
   }
 
-  // Default function to render an option with search term highlighting
-  const renderDefaultOption = (option: Option, isSelected: boolean) => {
-    const parts = option.label.split(new RegExp(`(${searchTerm})`, 'gi'))
-    return (
-      <div
-        key={option.value}
-        className={classNames(
-          'cursor-pointer px-4 py-2 hover:bg-teal-50 text-gray-500',
-          {
-            'bg-teal-50': isSelected,
-            'bg-white': !isSelected,
-          }
-        )}
-        onClick={() => handleOptionClick(option)}
-      >
-        {parts.map((part, index) =>
-          part.toLowerCase() === searchTerm.toLowerCase() ? (
-            <span key={index} className="bg-teal-400">
-              {part}
-            </span>
-          ) : (
-            part
-          )
-        )}
-      </div>
-    )
-  }
-
-  // Function to handle changes in the search input
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
   }
 
-  // Function to handle search removal
   const handleRemoveSearch = () => {
     setSearchTerm('')
   }
 
-  // Function to toggle the dropdown open or closed
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
 
-  // Function to close the dropdown when clicking outside of it
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      dropdownMenuRef.current &&
-      !dropdownRef.current.contains(e.target as Node) &&
-      !dropdownMenuRef.current.contains(e.target as Node)
-    ) {
-      setIsOpen(false)
-    }
-  }
+  useClickOutside([selectRef, selectContentRef], () => setIsOpen(false))
 
-  // Adding event listener for clicks outside the dropdown
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
-
-  // To reset selected option whenever single/multiple switched
   useEffect(() => {
     setSelectedOptions([])
     onChange([])
   }, [onChange, multiple])
 
-  // Dropdown menu element, rendered either directly or via a portal
-  const dropdownMenu = (
-    <div
-      className={classNames(
-        'absolute w-full bg-white border border-gray-300 rounded-sm shadow-lg mt-1.5',
-        {
-          'z-50': zIndex === 50,
-          'z-100': zIndex === 100,
-        }
-      )}
-      style={{
-        zIndex,
-        width: dropdownRef.current?.offsetWidth, // Set the width dynamically
-        left: portal ? dropdownRef.current?.offsetLeft : 0, // Set left dynamically
-      }}
-      ref={dropdownMenuRef}
-    >
-      {withSearch && (
-        <>
-          <Search className="absolute h-4 w-4 top-3 left-4 text-gray-400" />
-          <input
-            type="text"
-            className="w-full px-12 py-2 border-b border-gray-300 outline-none text-gray-500"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-          {searchTerm && (
-            <CircleX
-              className="absolute h-4 w-4 top-3 right-4 text-gray-500 cursor-pointer"
-              onClick={handleRemoveSearch}
-            />
-          )}
-        </>
-      )}
-      <div className="max-h-60 overflow-y-auto">
-        {options.map((option) =>
-          renderDefaultOption(
-            option,
-            selectedOptions.some((selected) => selected.value === option.value)
-          )
-        )}
-      </div>
-    </div>
-  )
-
   return (
     <div className="flex items-center max-h-max">
       <label className="mr-4 lg:mr-20 text-gray-700">Label</label>
-      <div className="relative w-full" ref={dropdownRef}>
+      <div className="relative w-full" ref={selectRef}>
         <div
           className={classNames(
             'relative border border-gray-300 rounded p-2 cursor-pointer h-10',
@@ -195,7 +89,6 @@ const Select: FC<SelectProps> = ({
                     onClick={() => handleRemoveOption(opt)}
                   >
                     <span className="w-max">{opt.label}</span>
-
                     <CircleX className="w-4 h-4 text-gray-500" />
                   </span>
                 ))}
@@ -203,10 +96,39 @@ const Select: FC<SelectProps> = ({
           <ChevronDown className="h-4 w-4 absolute right-2 top-3 text-gray-500" />
         </div>
         {isOpen &&
-          (portal ? createPortal(dropdownMenu, document.body) : dropdownMenu)}
+          (portal ? (
+            createPortal(
+              <SelectContent
+                options={options}
+                selectedOptions={selectedOptions}
+                handleOptionClick={handleOptionClick}
+                searchTerm={searchTerm}
+                handleSearchChange={handleSearchChange}
+                handleRemoveSearch={handleRemoveSearch}
+                withSearch={withSearch}
+                zIndex={zIndex}
+                selectRef={selectRef}
+                selectContentRef={selectContentRef}
+              />,
+              document.body
+            )
+          ) : (
+            <SelectContent
+              options={options}
+              selectedOptions={selectedOptions}
+              handleOptionClick={handleOptionClick}
+              searchTerm={searchTerm}
+              handleSearchChange={handleSearchChange}
+              handleRemoveSearch={handleRemoveSearch}
+              withSearch={withSearch}
+              zIndex={zIndex}
+              selectRef={selectRef}
+              selectContentRef={selectContentRef}
+            />
+          ))}
       </div>
     </div>
   )
 }
 
-export default Select
+export default SelectContainer

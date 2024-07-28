@@ -1,4 +1,4 @@
-import { Option } from '@/types/option'
+import { Option } from '@/types/select'
 
 export const options: Option[] = [
   { value: '1', label: 'Option 1' },
