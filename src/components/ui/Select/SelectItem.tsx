@@ -8,6 +8,7 @@ interface SelectItemProps {
   isSelected: boolean
   searchTerm: string
   onClick: (option: Option) => void
+  key?: string | number
 }
 
 const SelectItem: FC<SelectItemProps> = ({
@@ -15,11 +16,12 @@ const SelectItem: FC<SelectItemProps> = ({
   isSelected,
   searchTerm,
   onClick,
+  key,
 }) => {
   const parts = option.label.split(new RegExp(`(${searchTerm})`, 'gi'))
   return (
     <div
-      key={option.value}
+      key={key}
       className={`cursor-pointer px-4 py-2 ${isSelected ? 'bg-teal-50' : 'bg-white'} text-gray-500 hover:bg-teal-50`}
       onClick={() => onClick(option)}
     >

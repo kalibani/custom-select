@@ -31,6 +31,7 @@ const SelectContent: FC<SelectContentProps> = ({
   selectRef,
   selectContentRef,
   portal,
+  renderOption,
 }) => {
   return (
     <div
@@ -60,17 +61,33 @@ const SelectContent: FC<SelectContentProps> = ({
         </>
       )}
       <div className="max-h-60 overflow-y-auto">
-        {options.map((option) => (
-          <SelectItem
-            key={option.value}
-            option={option}
-            searchTerm={searchTerm}
-            isSelected={selectedOptions.some(
-              (selected) => selected.value === option.value
-            )}
-            onClick={handleOptionClick}
-          />
-        ))}
+        {options.map((option, index) => {
+          const isSelected = selectedOptions.some(
+            (selected) => selected.value === option.value
+          )
+
+          if (renderOption) {
+            return (
+              <div
+                key={`${option.value}-${index}`}
+                onClick={() => handleOptionClick(option)}
+                className={`cursor-pointer px-4 py-2 ${isSelected ? 'bg-teal-50' : 'bg-white'} text-gray-500 hover:bg-teal-50`}
+              >
+                {renderOption(option)}
+              </div>
+            )
+          }
+
+          return (
+            <SelectItem
+              key={`${option.value}-${index}`}
+              option={option}
+              searchTerm={searchTerm}
+              isSelected={isSelected}
+              onClick={handleOptionClick}
+            />
+          )
+        })}
       </div>
     </div>
   )

@@ -18,6 +18,7 @@ const Select: FC<SelectProps> = ({
   withSearch = true,
   zIndex = 1100,
   outlined = false,
+  renderOption,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -117,6 +118,7 @@ const Select: FC<SelectProps> = ({
                 selectRef={selectRef}
                 selectContentRef={selectContentRef}
                 portal={portal}
+                renderOption={renderOption}
               />,
               document.body
             )
@@ -133,6 +135,7 @@ const Select: FC<SelectProps> = ({
               selectRef={selectRef}
               selectContentRef={selectContentRef}
               portal={portal}
+              renderOption={renderOption}
             />
           ))}
       </div>

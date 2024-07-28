@@ -3,6 +3,7 @@
 export type Option = {
   value: string
   label: string
+  [key: string]: any
 }
 
 export interface SelectProps {
@@ -13,4 +14,5 @@ export interface SelectProps {
   withSearch?: boolean
   zIndex?: number
   outlined?: boolean
+  renderOption?: (option: Option) => React.ReactNode
 }
