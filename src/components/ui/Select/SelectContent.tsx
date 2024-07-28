@@ -31,7 +31,7 @@ const SelectContent: FC<SelectContentProps> = ({
   selectRef,
   selectContentRef,
   portal,
-  renderOption,
+  customRenderOption,
 }) => {
   return (
     <div
@@ -65,15 +65,15 @@ const SelectContent: FC<SelectContentProps> = ({
           const isSelected = selectedOptions.some(
             (selected) => selected.value === option.value
           )
-
-          if (renderOption) {
+          // render option using custom render if customRenderOption provided
+          if (customRenderOption) {
             return (
               <div
                 key={`${option.value}-${index}`}
                 onClick={() => handleOptionClick(option)}
                 className={`cursor-pointer px-4 py-2 ${isSelected ? 'bg-teal-50' : 'bg-white'} text-gray-500 hover:bg-teal-50`}
               >
-                {renderOption(option)}
+                {customRenderOption(option)}
               </div>
             )
           }

@@ -18,7 +18,7 @@ const Select: FC<SelectProps> = ({
   withSearch = true,
   zIndex = 1100,
   outlined = false,
-  renderOption,
+  customRenderOption,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -69,7 +69,7 @@ const Select: FC<SelectProps> = ({
   const handleToggle = () => {
     setIsOpen(!isOpen)
   }
-
+  // hook to close the dropdown menu when user click outside the component
   useClickOutside([selectRef, selectContentRef], () => setIsOpen(false))
 
   useEffect(() => {
@@ -118,7 +118,7 @@ const Select: FC<SelectProps> = ({
                 selectRef={selectRef}
                 selectContentRef={selectContentRef}
                 portal={portal}
-                renderOption={renderOption}
+                customRenderOption={customRenderOption}
               />,
               document.body
             )
@@ -135,7 +135,7 @@ const Select: FC<SelectProps> = ({
               selectRef={selectRef}
               selectContentRef={selectContentRef}
               portal={portal}
-              renderOption={renderOption}
+              customRenderOption={customRenderOption}
             />
           ))}
       </div>
