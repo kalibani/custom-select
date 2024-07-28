@@ -113,7 +113,8 @@ export default App;
 You can customize how each option is rendered using the `customRenderOption` prop. This prop accepts a function that receives an option object and returns a React element. Here's an example:
 
 ```import React from 'react';
-import { Select } from 'makyo-multi-select';
+import { Select, Option } from 'makyo-multi-select';
+import "makyo-multi-select/dist/style.css";
 
 const options: Option = [
   { value: 'Abe', label: 'Abe', customAbbreviation: 'A' },
