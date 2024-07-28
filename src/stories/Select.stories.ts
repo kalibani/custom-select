@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react'
-import Select from '../components/ui/Select'
+import Select from '../components/ui/select'
 import { options } from '../static-data/options'
 
 const meta = {
