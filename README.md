@@ -115,16 +115,20 @@ You can customize how each option is rendered using the `customRenderOption` pro
 ```import React from 'react';
 import { Select } from 'makyo-multi-select';
 
-const options = [
+const options: Option = [
   { value: 'Abe', label: 'Abe', customAbbreviation: 'A' },
   { value: 'John', label: 'John', customAbbreviation: 'J' },
   { value: 'Dustin', label: 'Dustin', customAbbreviation: 'D' },
 ];
 
-const formatOptionLabel = ({ label, customAbbreviation }) => (
-  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+const customRenderOption = ({ label, customAbbreviation }: Option) => (
+  <div
+    style={{ display: "flex", justifyContent: "space-between", width: "100%" }}
+  >
     <div>{label}</div>
-    <div style={{ marginLeft: '10px', color: '#ccc' }}>{customAbbreviation}</div>
+    <div style={{ marginLeft: "10px", color: "#ccc" }}>
+      {customAbbreviation}
+    </div>
   </div>
 );
 
@@ -132,7 +136,7 @@ const App = () => {
   return (
     <Select
       options={options}
-      formatOptionLabel={formatOptionLabel}
+      customRenderOption={customRenderOption}
     />
   );
 };
