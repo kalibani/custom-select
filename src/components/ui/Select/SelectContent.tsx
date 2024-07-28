@@ -1,22 +1,24 @@
-import React, { FC } from 'react'
-import classNames from 'classnames'
+import { FC, ChangeEvent, RefObject } from 'react'
 import { Search, CircleX } from 'lucide-react'
 
 // Components
 import SelectItem from './SelectItem'
 
+// Types
 import { SelectProps, Option } from '@/types/select'
 
+// Placed SelectContentProps close to its usage since this will not be shared with another component
 interface SelectContentProps
-  extends Pick<SelectProps, 'options' | 'withSearch' | 'zIndex'> {
+  extends Omit<SelectProps, 'onChange' | 'multiple' | 'outlined'> {
   selectedOptions: Option[]
   handleOptionClick: (option: Option) => void
   searchTerm: string
-  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
   handleRemoveSearch: () => void
-  selectRef: React.RefObject<HTMLDivElement>
-  selectContentRef: React.RefObject<HTMLDivElement>
+  selectRef: RefObject<HTMLDivElement>
+  selectContentRef: RefObject<HTMLDivElement>
 }
+
 const SelectContent: FC<SelectContentProps> = ({
   options,
   selectedOptions,
@@ -28,20 +30,15 @@ const SelectContent: FC<SelectContentProps> = ({
   zIndex,
   selectRef,
   selectContentRef,
+  portal,
 }) => {
   return (
     <div
-      className={classNames(
-        'absolute w-full bg-white border border-gray-300 rounded-sm shadow-lg mt-1.5',
-        {
-          'z-50': zIndex === 50,
-          'z-100': zIndex === 100,
-        }
-      )}
+      className={`absolute w-full bg-white border border-gray-300 rounded-sm shadow-lg mt-1.5`}
       style={{
         zIndex,
         width: selectRef.current?.offsetWidth, // Set the width dynamically
-        left: 0, // Adjust this if needed for proper positioning
+        left: portal ? selectRef.current?.offsetLeft : 0, // Set left dynamically
       }}
       ref={selectContentRef}
     >
@@ -67,6 +64,7 @@ const SelectContent: FC<SelectContentProps> = ({
           <SelectItem
             key={option.value}
             option={option}
+            searchTerm={searchTerm}
             isSelected={selectedOptions.some(
               (selected) => selected.value === option.value
             )}

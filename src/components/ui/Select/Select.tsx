@@ -1,18 +1,22 @@
 import { useState, useEffect, useRef, FC, ChangeEvent } from 'react'
 import { createPortal } from 'react-dom'
-import classNames from 'classnames'
-import { SelectProps, Option } from '@/types/select'
+// icons
 import { ChevronDown, CircleX } from 'lucide-react'
+
+// types
+import { SelectProps, Option } from '@/types/select'
+
+// components
 import SelectContent from './SelectContent'
 import useClickOutside from '@/hooks/useClickOutside'
 
-const SelectContainer: FC<SelectProps> = ({
+const Select: FC<SelectProps> = ({
   options,
   multiple = true,
   onChange,
   portal = false,
   withSearch = true,
-  zIndex = 50,
+  zIndex = 1100,
   outlined = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -24,15 +28,21 @@ const SelectContainer: FC<SelectProps> = ({
 
   const handleOptionClick = (option: Option) => {
     if (multiple) {
+      // Check if the clicked option is selected
       const isSelected = selectedOptions.some(
         (selected) => selected.value === option.value
       )
+      // Update selected options and remove if already selected
       const newSelectedOptions = isSelected
         ? selectedOptions.filter((selected) => selected.value !== option.value)
         : [...selectedOptions, option]
+
+      // Update the state with the new selected options
       setSelectedOptions(newSelectedOptions)
+      // Trigger onChange with new selected options
       onChange(newSelectedOptions)
     } else {
+      // For single selection, set the selected option and close dropdown
       setSelectedOptions([option])
       onChange(option)
       setIsOpen(false)
@@ -71,12 +81,9 @@ const SelectContainer: FC<SelectProps> = ({
       <label className="mr-4 lg:mr-20 text-gray-700">Label</label>
       <div className="relative w-full" ref={selectRef}>
         <div
-          className={classNames(
-            'relative border border-gray-300 rounded p-2 cursor-pointer h-10',
-            {
-              'bg-gray-300': outlined,
-            }
-          )}
+          className={`relative border border-gray-300 rounded p-2 cursor-pointer h-10 ${
+            outlined ? 'bg-gray-300' : ''
+          }`}
           onClick={handleToggle}
         >
           <div className="flex gap-1 max-w-[300px] md:max-w-[980px] overflow-auto no-scrollbar">
@@ -109,6 +116,7 @@ const SelectContainer: FC<SelectProps> = ({
                 zIndex={zIndex}
                 selectRef={selectRef}
                 selectContentRef={selectContentRef}
+                portal={portal}
               />,
               document.body
             )
@@ -124,6 +132,7 @@ const SelectContainer: FC<SelectProps> = ({
               zIndex={zIndex}
               selectRef={selectRef}
               selectContentRef={selectContentRef}
+              portal={portal}
             />
           ))}
       </div>
@@ -131,4 +140,4 @@ const SelectContainer: FC<SelectProps> = ({
   )
 }
 
-export default SelectContainer
+export default Select
