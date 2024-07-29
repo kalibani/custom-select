@@ -28,7 +28,13 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    dts({ rollupTypes: true, insertTypesEntry: true }),
+    dts({
+      outDir: 'dist', // dts.root + 'dist' => where we need to rollup.
+      root: '../', //vite.root + ../ = ./ = (dts.root)
+      staticImport: true,
+      insertTypesEntry: true,
+      rollupTypes: true,
+    }),
   ] as UserConfig['plugins'],
   css: {
     postcss: {
