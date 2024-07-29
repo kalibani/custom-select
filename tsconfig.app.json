@@ -31,6 +31,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
-  "exclude": ["src/**/**/*.stories.ts"]
+  "include": ["src"]
+  // "exclude": ["src/**/**/*.stories.ts"]
 }
