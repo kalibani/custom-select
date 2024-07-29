@@ -11,26 +11,53 @@ const meta = {
       description: 'The list of options available for selection.',
     },
     multiple: {
-      control: 'boolean',
+      control: {
+        type: 'boolean',
+      },
       description: 'Allows selection of multiple options.',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+      },
     },
     withSearch: {
       control: 'boolean',
       description:
         'Enables the search functionality within the select dropdown.',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+      },
     },
     portal: {
       control: 'boolean',
       description:
         'Renders the dropdown options using a React portal, positioning them outside the usual DOM hierarchy.',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+      },
     },
     outlined: {
       control: 'boolean',
       description: 'Applies an outlined style to the select component.',
+      table: {
+        type: {
+          summary: 'boolean',
+        },
+      },
     },
     zIndex: {
       control: 'number',
       description: 'Specifies the z-index for the dropdown menu.',
+      table: {
+        type: {
+          summary: 'number',
+        },
+      },
     },
     onChange: {
       action: 'changed',
