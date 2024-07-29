@@ -45,7 +45,7 @@ const meta = {
     withSearch: true,
     portal: false,
     outlined: false,
-    zIndex: 100,
+    zIndex: 1100,
   },
 } satisfies Meta<typeof Select>
 
@@ -61,7 +61,7 @@ export const Default: Story = {
     withSearch: true,
     portal: false,
     outlined: false,
-    zIndex: 100,
+    zIndex: 1100,
   },
 }
 

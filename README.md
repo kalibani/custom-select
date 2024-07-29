@@ -1,4 +1,3 @@
-
 # Custom Select Component
 
 A customizable select component using React and TypeScript.
@@ -11,7 +10,6 @@ A customizable select component using React and TypeScript.
 - **Customizable Option Rendering**: Allow customization of how options are rendered.
 - **Search Filtering**: Ensure the search can filter a long list of options into a shorter list.
 - **Toggle Features**: Allow each feature (like search) to be turned on or off.
-
 
 ## Installation
 
@@ -26,7 +24,6 @@ Or With Yarn
 ```bash
 yarn add makyo-multi-select
 ```
-
 
 ## Basic Usage
 
@@ -147,21 +144,21 @@ export default App;
 
 ## Available Props
 
-
-| Prop           | Type                                                            | Default Value | Description                                                                                                    |
-|----------------|-----------------------------------------------------------------|---------------|----------------------------------------------------------------------------------------------------------------|
-| `options`      | `Option[]`                                                      | `[]`          | List of options to select from.                                                                                |
-| `multiple`   | `boolean`                                                       | `true`        | Enable or disable multiple selection.                                                                          |
-| `onChange`     | `function` | `() => void`                                     | Callback function to handle the change event when options are selected or unselected.                          |
-| `portal`       | `boolean`                                                       | `false`       | Allow the dropdown to be used with or without a portal.                                                        |               | Custom function to render each option.                                                                         |
-| `withSearch`   | `boolean`                                                       | `true`        | Enable or disable the search feature within the dropdown.                                                      |
-| `zIndex`       | `number`                                                        | `50`          | Ensure the floating menu works with elements that have a z-index greater than the specified value.             |
-| `outlined`       | `boolean`                                                        | `false`          | Enable or disable outline style.             |
-| `customRenderOption`       | `(option: Option) => React.ReactNode`                                                        | `undefined`          | Custom function to render each option.             |
-
+| Prop                 | Type                                  | Default Value | Description                                                                                        |
+| -------------------- | ------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------- | --- | -------------------------------------- |
+| `options`            | `Option[]`                            | `[]`          | List of options to select from.                                                                    |
+| `multiple`           | `boolean`                             | `true`        | Enable or disable multiple selection.                                                              |
+| `onChange`           | `function`                            | `() => void`  | Callback function to handle the change event when options are selected or unselected.              |
+| `portal`             | `boolean`                             | `false`       | Allow the dropdown to be used with or without a portal.                                            |     | Custom function to render each option. |
+| `withSearch`         | `boolean`                             | `true`        | Enable or disable the search feature within the dropdown.                                          |
+| `zIndex`             | `number`                              | `1100`        | Ensure the floating menu works with elements that have a z-index greater than the specified value. |
+| `outlined`           | `boolean`                             | `false`       | Enable or disable outline style.                                                                   |
+| `customRenderOption` | `(option: Option) => React.ReactNode` | `undefined`   | Custom function to render each option.                                                             |
 
 ## Storybook Usage
-In the project directory, you can run: 
+
+In the project directory, you can run:
+
 ```
 npm run storybook
 ```
